@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home"
+        android:title="首页"
+        app:showAsAction="ifRoom"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/music"
+        android:title="音乐"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        />
+
+    <item
+        android:id="@+id/my"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="我的"/>
+
+</menu>

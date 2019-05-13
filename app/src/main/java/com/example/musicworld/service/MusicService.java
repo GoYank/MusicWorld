@@ -52,9 +52,7 @@ public class MusicService extends Service {
     private boolean isStart;
     private boolean isClick;
     private boolean isNext;
-    private boolean isNoClick;
-    private boolean isNoStart;
-    private String noPath;
+    private boolean isStop;
     private NotificationManager notificationManager;
     private Intent intent1 = new Intent("com.example.musicworld.MUSICRECIVER");
 
@@ -76,7 +74,7 @@ public class MusicService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, int flags, int startId) {
         path = intent.getStringExtra("path");
         song = intent.getStringExtra("song");
         singer = intent.getStringExtra("singer");
@@ -85,7 +83,6 @@ public class MusicService extends Service {
         MyApplication.singer = singer;
         MyApplication.position = position;
         MyApplication.path = path;
-
         sendFlagNoClearNotification(song, singer, position, true);
         Log.e("gyk", "MyAPP.position==" + position);
         Log.e("gyk", "se_song==" + song);
@@ -101,6 +98,7 @@ public class MusicService extends Service {
                 intent1.putExtra("singer", singer);
                 intent1.putExtra("isStop", false);
                 sendBroadcast(intent1);
+                upDatePlayer();
             }
 
         } else {
@@ -108,10 +106,13 @@ public class MusicService extends Service {
                 Log.e(TAG, "isStart=");
                 startPlayer();
                 sendFlagNoClearNotification(song, singer, position, true);
+                Log.e(TAG,"My.isStop"+MyApplication.isStop);
+                upDatePlayer();
             } else {
                 Log.e(TAG, "isStop=");
                 stopPlayer();
                 sendFlagNoClearNotification(song, singer, position, false);
+                Log.e(TAG,"My.isStop====="+MyApplication.isStop);
             }
         }
         if (isNext) {
@@ -121,6 +122,24 @@ public class MusicService extends Service {
         }
         Log.e(TAG, "onStartCommand");
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    public void upDatePlayer(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mediaPlayer != null && isStop == false) {
+                    intent1.putExtra("curr", mediaPlayer.getCurrentPosition());
+                    sendBroadcast(intent1);
+                    try {
+                        Thread.sleep(80);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
     }
 
     //发送通知(需要注意在android 8.0版本以后要添加渠道)
@@ -228,12 +247,14 @@ public class MusicService extends Service {
 
     public void startPlayer() {
         mediaPlayer.start();
+        isStop = false;
         intent1.putExtra("isStop", false);
         sendBroadcast(intent1);
     }
 
     public void stopPlayer() {
         mediaPlayer.pause();
+        isStop = true;
         intent1.putExtra("isStop", true);
         sendBroadcast(intent1);
     }

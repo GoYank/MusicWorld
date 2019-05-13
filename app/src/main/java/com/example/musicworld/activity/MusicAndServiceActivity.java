@@ -277,6 +277,9 @@ public class MusicAndServiceActivity extends BaseActivity {
             MyApplication.isStop = intent.getBooleanExtra("isStop", false);
             String song = intent.getStringExtra("song");
             String singer = intent.getStringExtra("singer");
+            int curr = intent.getIntExtra("curr", 0);
+            sb.setProgress(curr);
+            tv_origin.setText(formatTime(curr));
             tv_song.setText(song);
             tv_singer.setText(singer);
             if (MyApplication.isStop) {

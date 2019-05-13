@@ -63,8 +63,8 @@
                 android:id="@+id/iv_no_player"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="@dimen/dimen_2"
-                android:src="@mipmap/player_black" />
+                android:layout_marginLeft="@dimen/dimen_4"
+                android:src="@mipmap/player_no" />
 
             <ImageView
                 android:id="@+id/iv_no_pause"
